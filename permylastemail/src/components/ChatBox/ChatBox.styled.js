@@ -5,20 +5,16 @@ export const StyledChatBox = styled.div`
     --secondary-color: #faaadb;
     --background-color: #fcd4f8;
 
-    width: 100%;        // Make it fill the container
-    max-width: 800px;   // But not more than 800px
-    min-height: 50px;
-    max-height: 200px;
+    width: 500px;
+    height: 300px;
     border: 2px solid var(--secondary-color);
     box-sizing: border-box;
     background-color: rgba(0,0,0,0);
-    margin-bottom: 20px ;
     border-radius: 15px;
-    padding-left: 10px;
     
     display: flex;
     align-items: center;
-    justify-content: right;
+    justify-content: center;
 
     textarea {
         box-sizing: border-box;
@@ -28,7 +24,8 @@ export const StyledChatBox = styled.div`
         color: var(--main-color);
         resize: none;
         outline: none;
-        padding: 14px 0 0 10px;
+        padding: 0 20px;
+        text-align: center;
     }
 
     ::placeholder {

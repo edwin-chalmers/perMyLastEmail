@@ -3,8 +3,7 @@ import { StyledChatBox } from "./ChatBox.styled";
 import trainingPrompt from "../../trainingPrompt";
 import { getResponse } from "../../apiCalls";
 
-export default function ChatBox({ handleNewMessage, messages, setError }) {
-    const [text, setText] = useState('')
+export default function ChatBox({ handleNewMessage, messages, setError, text, setText, sendMessage }) {
 
     const handleKeyPress = (event) => {
         if (event.key === 'Enter' && !event.shiftKey) {
@@ -19,23 +18,8 @@ export default function ChatBox({ handleNewMessage, messages, setError }) {
         event.target.style.height = `${event.target.scrollHeight}px`
     }
 
-    const sendMessage = async () => {
-        if (text.trim()) {
-            try {
-                handleNewMessage({ content: text, role: "user" })
-                setText('')
-                const apiResponse = await getResponse([...messages, { "role": "system", "content": `${trainingPrompt}` }, { "content": text, "role": "user" }])
-
-                if (apiResponse) {
-                    handleNewMessage({ "content": apiResponse.choices[0].message.content, "role": "assistant" })
-                }
-
-            } catch (error) {
-                setError(true)
-                console.error('Failed to send message:', error)
-            }
-        }
-    }
+    const userMessages = messages.filter(msg => msg.role === "user");
+    const mostRecentUserMessage = userMessages.length > 0 ? userMessages[userMessages.length - 1].content : '';
 
     return (
         <StyledChatBox>
@@ -44,9 +28,8 @@ export default function ChatBox({ handleNewMessage, messages, setError }) {
                 value={text}
                 maxLength="988"
                 onKeyPress={handleKeyPress}
-                placeholder={!messages.length ? `Type your message here` : ''}
+                placeholder={mostRecentUserMessage || "Type your message here..."}
             ></textarea>
-            <button onClick={sendMessage} disabled={!text.trim()}>{`>>`}</button>
         </StyledChatBox>
     )
 }
