@@ -14,18 +14,17 @@ export default function ChatLog({ messages }) {
 
     return (
         <StyledChatLog>
-            {messages.map((msg, index) => {
-                const htmlContent = converter.makeHtml(msg.content)
-                return (
-                    <div key={index} className="chat-message">
-                        <img
-                            src={msg.role === "assistant" ? "/assets/robot.svg" : "/assets/user.svg"}
-                            alt={msg.role === "assistant" ? "DM Icon" : "Player Icon"}
-                        />
-                        <div className="message" dangerouslySetInnerHTML={{ __html: htmlContent }}></div>
-                    </div>
-                );
-            })}
+            {messages
+                .filter(msg => msg.role === "assistant")
+                .slice(-1)
+                .map((msg, index) => {
+                    const htmlContent = converter.makeHtml(msg.content);
+                    return (
+                        <div key={index} className="chat-message">
+                            <div className="message" dangerouslySetInnerHTML={{ __html: htmlContent }}></div>
+                        </div>
+                    );
+                })}
             <div ref={endOfMessagesRef} />
         </StyledChatLog>
     )
